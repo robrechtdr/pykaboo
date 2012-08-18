@@ -2,7 +2,7 @@
 Pykaboo
 ===========
 
-A small project that makes checking python source code from the python standard library and user installed packages more comfortable.
+A convenient command line tool to check python source code from the python standard library and user installed packages.
 
 Running Pykaboo opens a new tab in your browser listing your python standard library modules folder and user installed packages folder. New paths can also be added to this list. 
 
@@ -16,4 +16,4 @@ For a list of commands::
 
     $ pykaboo help
 
-Tested on python2.7.3 .
+Tested with python2.7.3 .

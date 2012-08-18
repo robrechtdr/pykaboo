@@ -10,7 +10,7 @@ setup(
     #include_package_data=True,
     #scripts= None, #'pykaboo/__init__.py',
     url='http://pykaboo.herokuapp.com',
-    license='LICENSE.txt',
+    license='Modified BSD license',
     package_data={'': ['pykaboo_style.css']},
     data_files=[('pykaboo',['pykaboo/pykaboo_style.css'])],
     entry_points={

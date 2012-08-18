@@ -12,7 +12,7 @@ except ImportError:
     sys.exit()
 
 import argparse
-import Image
+#import Image
 import SimpleHTTPServer
 import BaseHTTPServer
 import webbrowser
