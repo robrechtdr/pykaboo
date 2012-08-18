@@ -72,7 +72,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("<li class=shortcut-list><a class='sh-c' href=%s>Python standard library modules</a></li>" % path_standard_library)
         f.write("\n<li class=shortcut-list><a class='sh-c' href=%s>User installed python modules</a></li>" % path_external_packages)
         try:
-            with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc: 
+            with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc: 
                 prc_string = prc.read()
             f.write(prc_string)
         except:
@@ -114,7 +114,7 @@ def _add_argument_handler():
             d_name = subcmd
         else:
             pass
-        with open(os.getenv("HOME")+'/.pykaboorc', "a") as prc:
+        with open(os.getenv("HOME")+'/.pykaboolinks', "a") as prc:
             prc.write("<li class=shortcut-list><a class='sh-c' href=%s>%s</a></li>\n" % (subcmd, d_name))
     else:
         print "\n'%s' is not an existing directory path.\n" % subcmd
@@ -127,7 +127,7 @@ def _remove_argument_handler():
         print "\nYou removed the top directory link name '%s'.\n" % subcmd
 
 def _link_name_checker(subcmd):
-    with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc:
+    with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc:
         lines = prc.readlines()
         for line in lines:
             suff = "%s</a></li>\n" % subcmd
@@ -138,10 +138,10 @@ def _link_name_checker(subcmd):
         return False
 
 def _remove_line(del_d_name):
-    with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc:
+    with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc:
         lines = prc.readlines()
 
-    with open(os.getenv("HOME")+'/.pykaboorc', "w") as prc:
+    with open(os.getenv("HOME")+'/.pykaboolinks', "w") as prc:
         for line in lines:
             suff = "%s</a></li>\n" % del_d_name
             if not line.endswith(suff):
