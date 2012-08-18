@@ -16,3 +16,4 @@ For a list of commands::
 
     $ pykaboo help
 
+Tested on python2.7.3 .
