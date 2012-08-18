@@ -9,7 +9,7 @@ setup(
     packages=['pykaboo', ],
     #include_package_data=True,
     #scripts= None, #'pykaboo/__init__.py',
-    url='http://pypi.python.org/pypi/Pykaboo/',
+    url='http://pykaboo.herokuapp.com',
     license='LICENSE.txt',
     package_data={'': ['pykaboo_style.css']},
     data_files=[('pykaboo',['pykaboo/pykaboo_style.css'])],
