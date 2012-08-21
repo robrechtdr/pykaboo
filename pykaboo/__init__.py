@@ -101,7 +101,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     displayname = name + "/"
                 if os.path.islink(fullname):
                     displayname = name + "@"
-                f.write('<li><a href="%s">%s</a>\n'% (name, displayname))
+                f.write('<li><a href="%s">%s</a>\n'% (fullname, displayname))
         f.write("</ul>\n<hr>\n</div>\n</body>\n</html>\n")
         length = f.tell()
         f.seek(0)
