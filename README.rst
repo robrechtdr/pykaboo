@@ -16,4 +16,4 @@ For a list of commands::
 
     $ pykaboo help
 
-Tested with python2.7.3 .
+Tested with python2.7.3 on Ubuntu 11.10. Windows is currently not supported.

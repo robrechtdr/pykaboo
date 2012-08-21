@@ -11,6 +11,7 @@ except ImportError:
     print "\npygments is not installed yet. Install pygments or run 'pip install -r requirements.txt'.\n"
     sys.exit()
 
+import platform
 import argparse
 #import Image
 import SimpleHTTPServer
@@ -26,6 +27,12 @@ try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
+
+if platform.system() == "Windows":
+    print "Currently Pykaboo does not support Windows."
+    sys.exit()
+else:
+    pass
 
 class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def __init__(self, request, host, server):
@@ -57,7 +64,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         css_file = open(path_to_pykaboo_css).read()
         f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
         f.write("<html>\n<head>\n<title>Directory and python file listing for %s</title>\n" % path)
-        f.write('<style type="text/css"> %s</style>\n' %css_file)
+        f.write('<style type="text/css"> %s</style>\n' % css_file)
         f.write('</head>\n')
         f.write("<body>\n<div class=page-container>")
         f.write("\n<div class='title-container'>")
@@ -66,7 +73,6 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         #po = open(os.getenv("HOME")+'/Desktop/sc/other/Pykaboo/pykaboo/pyk1.png').read()
         #print po
         #f.write("\n<img width='65' src='pyk1.png' id='symbol'/>\n")
-        #f.write("<img src='http://celebrity.womendiary.net/wp-content/uploads/MaryBonoMack-Scandalous-Pic.jpg'/>")
         f.write("\n</div>")
         f.write("<ul class=shortcut-list>\n")
         f.write("<li class=shortcut-list><a class='sh-c' href=%s>Python standard library modules</a></li>" % path_standard_library)
@@ -81,7 +87,10 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("\n</ul>")  
         f.write("\n<h5>Directory and python file listing for %s</h5>" % path)
         f.write("\n<hr>\n<ul>\n")
-        os.chdir("/")
+        if platform.system() != "windows":
+            os.chdir(root)
+        else:
+            pass
         for name in lis:
             fullname = os.path.join(path, name) 
             displayname = name
@@ -92,7 +101,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     displayname = name + "/"
                 if os.path.islink(fullname):
                     displayname = name + "@"
-                f.write('<li><a href="%s">%s</a>\n'% (fullname, displayname))
+                f.write('<li><a href="%s">%s</a>\n'% (name, displayname))
         f.write("</ul>\n<hr>\n</div>\n</body>\n</html>\n")
         length = f.tell()
         f.seek(0)
@@ -205,7 +214,7 @@ def main():
 
     webbrowser.open("http://localhost:8090")
 
-    os.chdir("/usr/lib/python2.7")
+    os.chdir(path_standard_library)
 
     print "\nType 'pykaboo help' for the list of commands."
     print "\nPress <CTRL> + C to stop running pykaboo.\n"
@@ -215,6 +224,13 @@ def main():
         server.serve_forever()
     except:
         print "\nBye bye!\n"
+
+if platform.system() == "Windows":
+    #windows root: 'C:'
+    root = os.path.splitdrive(sys.executable)[0]+"/"
+else:
+    root = "/"
+    #linux en mac
 
 path_to_pykaboo = os.path.abspath(__file__)
 if path_to_pykaboo.endswith(".pyc"):
