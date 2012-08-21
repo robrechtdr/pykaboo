@@ -18,7 +18,7 @@ setup(
     description='A python source viewer.',
     long_description=open('README.rst').read(),
     install_requires=[
-        "pygments >= 1.5",
+        "pygments >= 1.5", "argparse == 1.2.1"
     ],
 )
 

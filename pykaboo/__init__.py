@@ -11,6 +11,7 @@ except ImportError:
     print "\npygments is not installed yet. Install pygments or run 'pip install -r requirements.txt'.\n"
     sys.exit()
 
+from subprocess import call
 import platform
 import argparse
 #import Image
@@ -29,7 +30,7 @@ except ImportError:
     from StringIO import StringIO
 
 if platform.system() == "Windows":
-    print "Currently Pykaboo does not support Windows."
+    print "Windows users install Pykaboo on Cygwin with pip and run it from the Cygwin shell."
     sys.exit()
 else:
     pass
@@ -212,11 +213,21 @@ def main():
     else:
         pass
 
-    webbrowser.open("http://localhost:8090")
+ 
+
+    if "cygwin" in platform.system().lower():
+        try: 
+            call(["cygstart", "http://localhost:8090"])
+        except:
+            # Calling it once somehow causes an exception.
+            call(["cygstart", "http://localhost:8090"])
+    else:
+        webbrowser.open("http://localhost:8090")
 
     os.chdir(path_standard_library)
 
     print "\nType 'pykaboo help' for the list of commands."
+    #print "\nPykaboo is served on 'localhost:8090'"
     print "\nPress <CTRL> + C to stop running pykaboo.\n"
 
     server = BaseHTTPServer.HTTPServer(('', 8090), PykabooHTTPRequestHandler)
