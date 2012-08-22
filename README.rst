@@ -30,7 +30,7 @@ Use Cygwin or use a Linux distro on a virtual machine.
 
 * Using Cygwin:
 
-  1. Install Cygwin `Cygwin <http://www.cygwin.com/>`_. During the installation, also highlight the ``bins`` of ``Python``(under Interpreters) and ``wget``(under Web) to be installed. 
+  1. Install `Cygwin <http://www.cygwin.com/>`_. During the installation, also mark the ``bins`` of ``Python``(under Interpreters) and ``wget``(under Web) for installation. 
 
   2. In the Cygwin terminal run the following commands::
     
@@ -47,7 +47,7 @@ Use Cygwin or use a Linux distro on a virtual machine.
 
 * Using a virtual machine:
 
-  `Here <http://www.psychocats.net/ubuntu/virtualbox>`_ you can find a tutorial to install the Linux distro Ubuntu on the virtual box virtual machine. Once installed see the Linux users part.
+  `Here <http://www.psychocats.net/ubuntu/virtualbox>`_ you can find a tutorial to install the Linux distro Ubuntu on the virtual box virtual machine. Once installed see the Linux users section.
 
 Support & bug reports
 =====================
