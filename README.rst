@@ -30,7 +30,7 @@ Use Cygwin or use a Linux distro on a virtual machine.
 
 * Using Cygwin:
 
-  1. Install `Cygwin <http://www.cygwin.com/>`_. During the installation, also mark the ``bins`` of ``Python``(under Interpreters) and ``wget``(under Web) for installation. 
+  1. Install `Cygwin <http://www.cygwin.com/>`_. During the installation, also mark the ``bins`` of ``Python`` (under Interpreters) and ``wget`` (under Web) for installation. 
 
   2. In the Cygwin terminal run the following commands::
     
@@ -51,5 +51,4 @@ Use Cygwin or use a Linux distro on a virtual machine.
 
 Support & bug reports
 =====================
-If you need support or if you spot bugs send a message to robrecht.de.rouck at gmail.com. If you have a github account opening an issue or making a poll request is appreciated in case of bugs.
-
+If you need support or if you spot bugs send a message to *robrecht.de.rouck at gmail.com*. If you have a github account opening an issue or making a poll request is appreciated in case of bugs.

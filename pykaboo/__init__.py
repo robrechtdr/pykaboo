@@ -12,6 +12,7 @@ except ImportError:
     sys.exit()
 
 from subprocess import call
+import sysconfig
 import platform
 import argparse
 #import Image
@@ -77,7 +78,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("\n</div>")
         f.write("<ul class=shortcut-list>\n")
         f.write("<li class=shortcut-list><a class='sh-c' href=%s>Python standard library modules</a></li>" % path_standard_library)
-        f.write("\n<li class=shortcut-list><a class='sh-c' href=%s>User installed python modules</a></li>" % path_external_packages)
+        f.write("\n<li class=shortcut-list><a class='sh-c' href=%s>User installed python packages</a></li>" % path_external_packages)
         try:
             with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc: 
                 prc_string = prc.read()
@@ -248,7 +249,7 @@ if path_to_pykaboo.endswith(".pyc"):
     path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.pyc", "/pykaboo_style.css")
 else:
     path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.py", "/pykaboo_style.css")
-path_external_packages = dc.get_python_lib()
+path_external_packages = sysconfig.get_path('platlib')
 path_standard_library = dc.get_python_lib(standard_lib=True)
 
 if __name__ == '__main__':
