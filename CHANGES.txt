@@ -9,3 +9,4 @@ v0.1.3, 24 august 2012 --
 - The pykaboo help command is now pretty printing nicely accross different terminal sizes. 
 - Code comments have improved and deeply nested conditionals have been put into a seperate function. 
 - In a virtual environment the link to the user installed packages now uses the appropriate path.  
+- Pretty print output of add and remove arguments improved.

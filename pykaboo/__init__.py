@@ -8,7 +8,7 @@ try:
     from pygments.lexers import PythonLexer
     from pygments.formatters import HtmlFormatter
 except ImportError:
-    print "\npygments is not installed yet. Install pygments or run 'pip install -r requirements.txt'.\n"
+    print "Pygments is not installed yet. Install pygments or run 'pip install -r requirements.txt'."
     sys.exit()
 
 # NOTE: 
@@ -146,24 +146,24 @@ def _show_added_shortcut_links():
 
 def _handle_add_argument():
     if os.path.isdir(subcmd):
-        print "\nYou added '%s' to the top directory links." % subcmd
-        d_name = raw_input("\nSpecify the name of this link. Just pressing <enter> uses '%s' as the link name.\n> " % subcmd)
-        print ""
+        print "You added '%s' to the green directory links. Specify the name of this link." % subcmd
+        d_name = raw_input("Just pressing <enter> uses '%s' as the link name.\n>> " % subcmd)
         if len(d_name) == 0:
             d_name = subcmd
         else:
             pass
         with open(os.getenv("HOME")+'/.pykaboolinks', "a") as prc:
             prc.write("<li class=shortcut-list><a class='sh-c' href=%s>%s</a></li>\n" % (subcmd, d_name))
+        print "You added '%s' as a green directory link." % d_name
     else:
-        print "\n'%s' is not an existing directory path.\n" % subcmd
+        print "'%s' is not an existing directory path." % subcmd
 
 def _handle_remove_argument():
     if not _is_link_name(subcmd):
-        print "\nthe top directory link name '%s' does not exist yet.\n" % subcmd
+        print "The green directory link name '%s' does not exist yet." % subcmd
     else:
         _remove_line(subcmd)
-        print "\nYou removed the top directory link name '%s'.\n" % subcmd
+        print "You removed the green directory link name '%s'." % subcmd
 
 def _is_link_name(subcmd):
     with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc:
@@ -203,8 +203,10 @@ def _handle_arguments():
         cmd, subcmd = args.cmd
         if cmd == "add":
             _handle_add_argument()
+            os._exit(1)
         elif cmd == "remove":
             _handle_remove_argument()
+            os._exit(1)
         else:
             print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % cmd
         
