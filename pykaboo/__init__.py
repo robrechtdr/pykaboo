@@ -11,20 +11,24 @@ except ImportError:
     print "\npygments is not installed yet. Install pygments or run 'pip install -r requirements.txt'.\n"
     sys.exit()
 
+# NOTE: 
+# PFF stands for scaffolding code for a Possible Future Feature.
+#
+# Comments not intended as code are indented by one space. Example: # This is a comment.
+# Comments intended as code are not indented.              Example: #print "This is a code comment."
+
 from subprocess import call
+import textwrap
 import sysconfig
 import platform
 import argparse
+# PFF:
 #import Image
 import SimpleHTTPServer
 import BaseHTTPServer
 import webbrowser
-import SocketServer
 import os
 import distutils.sysconfig as dc
-
-import urllib
-import cgi
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -37,10 +41,14 @@ else:
     pass
 
 class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def __init__(self, request, host, server):
-        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, request, host, server)
+    # PFF:
+    #def __init__(self, request, host, server):
+    #    SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, request, host, server)
    
     def do_GET(self):
+        # Needed to define global in order to encapsulate the body of _show_added_shortcut_links()
+        # How to best avoid global when encapsulating a piece of code? 
+        global path
         path = os.path.join(os.getcwdu(), self.path[1:])
         # This if body is only active when clicked on a .py link.
         if os.path.exists(path) and path.endswith('.py'):
@@ -57,11 +65,18 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
  
     def list_directory(self, path):
         try:
+            # Needed to define global in order to encapsulate the body of _show_added_shortcut_links()
+            # How to best avoid global when encapsulating a piece of code? 
+            global lis
             lis = os.listdir(path)
         except os.error:
             self.send_error(404, "No permission to list directory")
             return None
+
         lis.sort(key=lambda a: a.lower())
+        # Needed to define global in order to encapsulate the body of _show_added_shortcut_links()
+        # How to best avoid global when encapsulating a piece of code? 
+        global f
         f = StringIO()
         css_file = open(path_to_pykaboo_css).read()
         f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
@@ -71,7 +86,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("<body>\n<div class=page-container>")
         f.write("\n<div class='title-container'>")
         f.write("\n<h2>Pykaboo</h2>\n")
-        # Dnw:
+        # PFF:
         #po = open(os.getenv("HOME")+'/Desktop/sc/other/Pykaboo/pykaboo/pyk1.png').read()
         #print po
         #f.write("\n<img width='65' src='pyk1.png' id='symbol'/>\n")
@@ -89,34 +104,47 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("\n</ul>")  
         f.write("\n<h5>Directory and python file listing for %s</h5>" % path)
         f.write("\n<hr>\n<ul>\n")
-        if platform.system() != "windows":
-            os.chdir(root)
-        else:
-            pass
-        for name in lis:
-            fullname = os.path.join(path, name) 
-            displayname = name
-            condition1 = name.endswith(u'.py') or os.path.isdir(fullname) or os.path.islink(fullname) 
-            condition2 = name.endswith(u'.egg-info') or name.endswith(u'.egg')
-            if condition1 and not condition2:    
-                if os.path.isdir(fullname):
-                    displayname = name + "/"
-                if os.path.islink(fullname):
-                    displayname = name + "@"
-                f.write('<li><a href="%s">%s</a>\n'% (fullname, displayname))
+        # PFF:
+        #if platform.system() != "windows":
+        #    os.chdir(root)
+        #else:
+        #    pass
+        os.chdir(root)
+        _show_added_shortcut_links()
         f.write("</ul>\n<hr>\n</div>\n</body>\n</html>\n")
         length = f.tell()
         f.seek(0)
         self.send_response(200)
         encoding = sys.getfilesystemencoding()
         self.send_header("Content-type", "text/html; charset=%s" % encoding)
-        # Dnw:
+        # PFF:
         #self.send_header('Content-type', 'text/css; charset=%s' % encoding)
         self.send_header("Content-Length", str(length))
         self.end_headers()
         return f  
 
-def _add_argument_handler():
+def _show_added_shortcut_links():
+    for name in lis:
+        fullname = os.path.join(path, name) 
+        displayname = name
+        condition1 = name.endswith(u'.py') or os.path.isdir(fullname) or os.path.islink(fullname) 
+        condition2 = name.endswith(u'.egg-info') or name.endswith(u'.egg')
+        if condition1 and not condition2:    
+            if os.path.isdir(fullname):
+                displayname = name + "/"
+            else:
+                pass
+
+            if os.path.islink(fullname):
+                displayname = name + "@"
+            else:
+                pass
+
+            f.write('<li><a href="%s">%s</a>\n'% (fullname, displayname))
+        else:
+            pass
+
+def _handle_add_argument():
     if os.path.isdir(subcmd):
         print "\nYou added '%s' to the top directory links." % subcmd
         d_name = raw_input("\nSpecify the name of this link. Just pressing <enter> uses '%s' as the link name.\n> " % subcmd)
@@ -130,14 +158,14 @@ def _add_argument_handler():
     else:
         print "\n'%s' is not an existing directory path.\n" % subcmd
 
-def _remove_argument_handler():
-    if not _link_name_checker(subcmd):
+def _handle_remove_argument():
+    if not _is_link_name(subcmd):
         print "\nthe top directory link name '%s' does not exist yet.\n" % subcmd
     else:
         _remove_line(subcmd)
         print "\nYou removed the top directory link name '%s'.\n" % subcmd
 
-def _link_name_checker(subcmd):
+def _is_link_name(subcmd):
     with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc:
         lines = prc.readlines()
         for line in lines:
@@ -158,98 +186,121 @@ def _remove_line(del_d_name):
             if not line.endswith(suff):
                 prc.write(line)
 
+def _is_int(v):
+    try:
+        i = int(v)
+        if i % 1 == 0:
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def _handle_arguments():
+    global cmd
+    global subcmd
+    try:
+        cmd, subcmd = args.cmd
+        if cmd == "add":
+            _handle_add_argument()
+        elif cmd == "remove":
+            _handle_remove_argument()
+        else:
+            print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % cmd
+        
+    except:
+        cmd = args.cmd
+        if cmd[0] == 'help':
+            col1 = ["\tpykaboo", "\tpykaboo port_number",
+                   "\tpykaboo add /path/to/directory", 
+                   "\tpykaboo remove name_of_directory_link"]
+            col2 = ["Runs pykaboo.",
+                   "Hosts pykaboo from a specified port number.",
+                   "Adds a directory, you are then prompted to name it.", 
+                   "Removes an added directory link."]
+            print "\nUsage:"
+            for c1, c2 in zip(col1, col2):
+                mc2 = "".join(textwrap.fill(c2, width=30, initial_indent="", subsequent_indent="\t\t\t\t\t\t", break_long_words = False))
+                print "%-40s %s" % (c1, mc2)
+            print ""
+            sys.exit()
+        elif cmd[0] == 'add':
+            print "Add which path? type 'pykaboo add /absolute/path/to/dir' to add a path."
+            sys.exit()                 
+        elif cmd[0] == 'remove':
+            print "remove which directory link name?"
+            print "Created link names:"
+            with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc:
+                lines = prc.readlines()
+            # Gets a specific part of a partially variable string
+            for i in lines:
+                j = i.split('>')
+                k = j[2].split('<')
+                print k[0]
+            print ""
+            sys.exit()
+        elif _is_int(cmd[0]):
+            if int(cmd[0]) in range(65535):
+                global port
+                port = int(cmd[0])
+            else:
+                print "Port number needs to be between 0 and 65534. Between 49152 and 65534 is advised."
+                sys.exit()
+
+        else:
+            print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % cmd[0] 
+            sys.exit()
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("cmd", help="Execute a command", action="store", nargs='*')
+
+    global args
     args = parser.parse_args()
-
     if args.cmd:
-        global cmd
-        global subcmd
-        try:
-            cmd, subcmd = args.cmd
-            if cmd == "add":
-                _add_argument_handler()
-            elif cmd == "remove":
-                _remove_argument_handler()
-            else:
-                print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % cmd
-            
-        except:
-            cmd = args.cmd
-            if cmd[0] == 'help':
-                rn_st = ("\nUsage: pykaboo"
-                         "                                    "
-                         "Runs pykaboo.")
-                print rn_st
-                add_st = ("       pykaboo add /path/to/directory"
-                         "             Adds a directory, you are then" 
-                         "                        "
-                         "                          prompted to name it.")
-                print add_st
-                remove_st = ("       pykaboo remove name_of_directory_link"
-                             "      Removes an added directory"
-                             "                                         "
-                             "             link.\n")
-                print remove_st
-
-            elif cmd[0] == 'add':
-                print "Add which path? type 'pykaboo add /absolute/path/to/dir' to add a path."
-
-            elif cmd[0] == 'remove':
-                print "remove which directory link name?"
-                print "Created link names:"
-                with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc:
-                    lines = prc.readlines()
-                # Gets a specific part of a partially variable string
-                for i in lines:
-                    j = i.split('>')
-                    k = j[2].split('<')
-                    print k[0]
-                print ""
-                
-            else:
-                print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % cmd[0] 
-        sys.exit()
+        _handle_arguments()
     else:
         pass
 
- 
-
     if "cygwin" in platform.system().lower():
         try: 
-            call(["cygstart", "http://localhost:8090"])
+            call(["cygstart", "http://localhost:%d" % port])
         except:
             # Calling it once somehow causes an exception.
-            call(["cygstart", "http://localhost:8090"])
+            call(["cygstart", "http://localhost:%d" % port])
+
     else:
-        webbrowser.open("http://localhost:8090")
+        webbrowser.open("http://localhost:%d" % port)
 
+    # Let pykaboo initially show the folder containing the standard library modules.
     os.chdir(path_standard_library)
-
-    print "\nType 'pykaboo help' for the list of commands."
-    #print "\nPykaboo is served on 'localhost:8090'"
-    print "\nPress <CTRL> + C to stop running pykaboo.\n"
-
-    server = BaseHTTPServer.HTTPServer(('', 8090), PykabooHTTPRequestHandler)
+    server = BaseHTTPServer.HTTPServer(('', port), PykabooHTTPRequestHandler)
     try:
+        print "\nType 'pykaboo help' for the list of commands."
+        print "\nPress <CTRL> + C to stop running pykaboo.\n"
+        print "Serving on 'http://localhost:%d'." % port
         server.serve_forever()
     except:
         print "\nBye bye!\n"
 
-if platform.system() == "Windows":
-    #windows root: 'C:'
-    root = os.path.splitdrive(sys.executable)[0]+"/"
-else:
-    root = "/"
-    #linux en mac
+# PFF:
+#if platform.system() == "Windows":
+#    root = os.path.splitdrive(sys.executable)[0]+"/"
+#else:
+#    root = "/"
 
+root = "/"
+port = 8090
 path_to_pykaboo = os.path.abspath(__file__)
 if path_to_pykaboo.endswith(".pyc"):
     path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.pyc", "/pykaboo_style.css")
 else:
     path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.py", "/pykaboo_style.css")
-path_external_packages = sysconfig.get_path('platlib')
+
+if ".virtualenvs" in sysconfig.get_path('platlib'):
+    path_external_packages = dc.get_python_lib()
+else:
+    path_external_packages = sysconfig.get_path('platlib')
 path_standard_library = dc.get_python_lib(standard_lib=True)
 
 if __name__ == '__main__':

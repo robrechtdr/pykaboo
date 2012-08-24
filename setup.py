@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='Pykaboo',
-    version='0.1.2',
+    version='0.1.3',
     author='Robrecht De Rouck',
     author_email='Robrecht.De.Rouck@gmail.com',
     packages=['pykaboo', ],
@@ -18,7 +18,12 @@ setup(
     description='A python source viewer.',
     long_description=open('README.rst').read(),
     install_requires=[
-        "pygments >= 1.5", "argparse == 1.2.1"
+        "pygments >= 1.5", "argparse >= 1.2.1", "distribute"
+    ],
+    classifiers=[
+        "Environment :: Console",
+        "Topic :: Utilities",
+        "Intended Audience :: Developers",
     ],
 )
 
