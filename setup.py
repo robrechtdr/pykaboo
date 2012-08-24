@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='Pykaboo',
-    version='0.1.3',
+    version='0.1.4',
     author='Robrecht De Rouck',
     author_email='Robrecht.De.Rouck@gmail.com',
     packages=['pykaboo', ],

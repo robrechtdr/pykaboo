@@ -218,29 +218,35 @@ def _handle_arguments():
                    "\tpykaboo remove name_of_directory_link"]
             col2 = ["Runs pykaboo.",
                    "Hosts pykaboo from a specified port number.",
-                   "Adds a directory, you are then prompted to name it.", 
-                   "Removes an added directory link."]
+                   "Adds a green directory link, you are then prompted to name it.", 
+                   "Removes an added green directory link."]
             print "\nUsage:"
             for c1, c2 in zip(col1, col2):
                 mc2 = "".join(textwrap.fill(c2, width=30, initial_indent="", subsequent_indent="\t\t\t\t\t\t", break_long_words = False))
                 print "%-40s %s" % (c1, mc2)
+            print "\nIf you want to remove all added links at once just delete the '.pykaboolinks'"
+            print "file in your home folder." 
             print ""
             sys.exit()
         elif cmd[0] == 'add':
             print "Add which path? type 'pykaboo add /absolute/path/to/dir' to add a path."
             sys.exit()                 
         elif cmd[0] == 'remove':
-            print "remove which directory link name?"
-            print "Created link names:"
-            with open(os.getenv("HOME")+'/.pykaboorc', "r") as prc:
+            with open(os.getenv("HOME")+'/.pykaboolinks', "r") as prc:
                 lines = prc.readlines()
-            # Gets a specific part of a partially variable string
-            for i in lines:
-                j = i.split('>')
-                k = j[2].split('<')
-                print k[0]
-            print ""
+                lines_string = "".join(lines) 
+            if len(lines_string.strip()) == 0:
+                print "You have not added any links yet."
+            else:
+                print "remove which directory link name?"
+                print "Created link names:"
+                # Gets a specific part of a partially variable string
+                for i in lines:
+                    j = i.split('>')
+                    k = j[2].split('<')
+                    print k[0]
             sys.exit()
+
         elif _is_int(cmd[0]):
             if int(cmd[0]) in range(65535):
                 global port
