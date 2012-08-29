@@ -12,6 +12,14 @@ Typical usage::
 
     $ pykaboo
 
+Pykaboo shows only '.py' files and directories by default. But you can also allow files with other extensions to be viewed::
+
+    $ pykaboo allow .css
+
+Or you can add custom directories next to the default links to the standard library modules and user installed packages::
+
+    $ pykaboo add ~/Documents/my_python_projects
+
 For a list of commands::
 
     $ pykaboo help
@@ -39,7 +47,7 @@ Use Cygwin or use a Linux distro on a virtual machine.
          $ easy_install pip
          $ pip install pykaboo
 
-     To use Pyakboo just run the following command in Cygwin::
+     To use Pykaboo just run the following command in Cygwin::
 
          $ pykaboo
 

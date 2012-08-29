@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='Pykaboo',
-    version='0.1.4',
+    version='0.1.5',
     author='Robrecht De Rouck',
     author_email='Robrecht.De.Rouck@gmail.com',
     packages=['pykaboo', ],
@@ -12,7 +12,7 @@ setup(
     url='http://pykaboo.herokuapp.com',
     license='Modified BSD license',
     package_data={'': ['pykaboo_style.css']},
-    data_files=[('pykaboo',['pykaboo/pykaboo_style.css'])],
+    #data_files=[('pykaboo',['pykaboo/pykaboo_style.css'])],
     entry_points={
     'console_scripts': ['pykaboo = pykaboo:main', ],},
     description='A python source viewer.',
