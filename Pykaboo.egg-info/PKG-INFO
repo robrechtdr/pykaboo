@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Pykaboo
-Version: 0.1.4
+Version: 0.1.6
 Summary: A python source viewer.
 Home-page: http://pykaboo.herokuapp.com
 Author: Robrecht De Rouck
@@ -19,6 +19,14 @@ Description: =======
         Typical usage::
         
             $ pykaboo
+        
+        Pykaboo shows only '.py' files and directories by default. But you can also allow files with other extensions to be viewed::
+        
+            $ pykaboo allow .css
+        
+        Or you can add custom directories next to the default links to the standard library modules and user installed packages::
+        
+            $ pykaboo add ~/Documents/my_python_projects
         
         For a list of commands::
         
@@ -47,7 +55,7 @@ Description: =======
                  $ easy_install pip
                  $ pip install pykaboo
         
-             To use Pyakboo just run the following command in Cygwin::
+             To use Pykaboo just run the following command in Cygwin::
         
                  $ pykaboo
         

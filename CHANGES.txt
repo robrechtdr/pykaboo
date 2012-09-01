@@ -21,3 +21,6 @@ v0.1.5, 29 august 2012 --
 - These allowed files using specified extensions can also be disallowed again as well.
 - Debugged some strange behavior with extra arguments: giving two random arguments now does not launch Pykaboo.
 - Some refactoring took place such as specifying exceptions, removing globals and removing try - except for handling logic flow.
+
+v0.1.6, 31 august 2012 --
+- Pykaboo incorrectly showed the raw html code at the bottom. Is now fixed.
