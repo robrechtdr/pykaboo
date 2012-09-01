@@ -31,7 +31,7 @@ import SimpleHTTPServer
 import BaseHTTPServer
 import webbrowser
 import os
-import distutils.sysconfig as dc
+import distutils.sysconfig as ds
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -42,8 +42,8 @@ except ImportError:
     pass
 
 if platform.system() == "Windows":
-    print ("Windows users install Pykaboo on Cygwin with pip and run it from"
-           " the Cygwin shell.")
+    print ("Windows users install Pykaboo on Cygwin with pip and run it from "
+      "the Cygwin shell.")
     sys.exit()
 else:
     pass
@@ -83,18 +83,17 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                         with open(path) as file:
                             cod = file.read()
                             html_formatter = HtmlFormatter(noclasses=True, 
-                                linenos='inline', style='friendly')
+                              linenos='inline', style='friendly')
                             lexer_func = getattr(pl, self.get_lexer(el))()
                             hl = highlight(cod, lexer_func, html_formatter)
                             hl_f = ('<body style="background:#f0f0f0">' 
-                                + hl + '</body>')
+                              + hl + '</body>')
                             self.send_response(200)
                             self.end_headers()
                             self.wfile.write(hl_f) 
                     else:
                         pass
 
-            SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         else:
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         
@@ -111,20 +110,23 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
         f.write("<html>\n<head>\n")
         f.write("<title>Directory and python file listing for %s"
-            "</title>\n" % path)
+          "</title>\n" % path)
         f.write('<style type="text/css"> %s</style>\n' % css_file)
         f.write('</head>\n')
         f.write("<body>\n<div class=page-container>")
         f.write("\n<div class='title-container'>")
         f.write("\n<h2>Pykaboo</h2>\n")
         # PFF:
-        #po = open(os.getenv("HOME")+'/Desktop/sc/other/Pykaboo/pykaboo/pyk1.png').read()
+        #po = open(os.getenv("HOME") +\
+        #  '/Desktop/sc/other/Pykaboo/pykaboo/pyk1.png').read()
         #print po
         #f.write("\n<img width='65' src='pyk1.png' id='symbol'/>\n")
         f.write("\n</div>")
         f.write("<ul class=shortcut-list>\n")
-        f.write("<li class=shortcut-list><a class='sh-c' href=%s>Python standard library modules</a></li>" % path_standard_library)
-        f.write("\n<li class=shortcut-list><a class='sh-c' href=%s>User installed python packages</a></li>" % path_external_packages)
+        f.write("<li class=shortcut-list><a class='sh-c' href=%s>"
+          "Python standard library modules</a></li>" % path_standard_library)
+        f.write("\n<li class=shortcut-list><a class='sh-c' href=%s>"
+          "User installed python packages</a></li>" % path_external_packages)
         # pass if file does not exist yet.
         try:
             with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc: 
@@ -181,7 +183,8 @@ def show_added_shortcut_links(html_f, path, li):
         eggs = name.endswith('.egg-info') or name.endswith('.egg')
         condition_dir = os.path.isdir(fullname) and not eggs
         condition_symlink = os.path.islink(fullname) and not eggs
-        condition = name.endswith('.py') or condition_dir or condition_symlink or file_endswith(name)
+        condition = (name.endswith('.py') or condition_dir or
+          condition_symlink or file_endswith(name))
         if condition:    
             if os.path.isdir(fullname):
                 displayname = name + "/"
@@ -200,14 +203,18 @@ def show_added_shortcut_links(html_f, path, li):
 
 def handle_add_argument(scmd):
     if os.path.isdir(scmd):
-        print "You added '%s' to the green directory links. Specify the name of this link." % scmd
-        d_name = raw_input("Just pressing <enter> uses '%s' as the link name.\n>> " % scmd)
+        print ("You added '%s' to the green directory links. "
+          "Specify the name of this link." % scmd)
+        d_name = raw_input("Just pressing <enter> uses '%s' as "
+          "the link name.\n>> " % scmd)
         if len(d_name) == 0:
             d_name = scmd
         else:
             pass
+
         with open(os.getenv("HOME") + '/.pykaboolinks', "a") as prc:
-            prc.write("<li class=shortcut-list><a class='sh-c' href=%s>%s</a></li>\n" % (scmd, d_name))
+            prc.write("<li class=shortcut-list><a class='sh-c' "
+              "href=%s>%s</a></li>\n" % (scmd, d_name))
         print "You added '%s' as a green directory link." % d_name
     else:
         print "'%s' is not an existing directory path." % scmd
@@ -246,7 +253,7 @@ def remove_line(del_d_name):
                 pass
 
 
-def is_int(v):
+def string_contains_int(v):
     try:
         i = int(v)
         if i % 1 == 0:
@@ -265,7 +272,9 @@ def handle_allow_argument(scmd):
     else:
         with open(os.getenv("HOME") + '/.pykabooext', "a") as prc:
             prc.write("%s\n" % scmd)
-    print "You allowed files with the '%s' extension to be viewed in Pykaboo." % scmd
+
+    print ("You allowed files with the '%s' extension to be viewed "
+      "in Pykaboo." % scmd)
 
 
 def handle_disallow_argument(scmd):
@@ -310,22 +319,28 @@ def handle_arguments(ar):
                    "\tpykaboo disallow extension_name"]
             col2 = ["Runs pykaboo.",
                    "Hosts pykaboo from a specified port number.",
-                   "Adds a green directory link, you are then prompted to name it.", 
+                   ("Adds a green directory link, you are then "
+                     "prompted to name it."), 
                    "Removes an added green directory link.",
-                   "Allows files with a specified extension to be viewed in pykaboo.",
+                   ("Allows files with a specified extension "
+                     "to be viewed in pykaboo."),
                    "Disallows allowed files of a specified extension."]
             print "\nUsage:"
             for c1, c2 in zip(col1, col2):
-                mc2 = "".join(textwrap.fill(c2, width=30, initial_indent="", subsequent_indent="\t\t\t\t\t\t", break_long_words=False))
+                mc2 = "".join(textwrap.fill(c2, width=30, initial_indent="", 
+                  subsequent_indent="\t\t\t\t\t\t", break_long_words=False))
                 print "%-40s %s" % (c1, mc2)
-            print "\nIf you want to remove all added links at once just delete the"
+            print ("\nIf you want to remove all added links at once "
+              "just delete the")
             print "'.pykaboolinks' file in your home folder." 
-            print "If you want to disallow all allowed extensions at once just delete the"
+            print ("If you want to disallow all allowed extensions at "
+              "once just delete the")
             print "'.pykabooext' file in your home folder."
             print ""
             sys.exit()
         elif ar[0] == 'add':
-            print "Add which path? type 'pykaboo add /absolute/path/to/dir' to add a path."
+            print ("Add which path? type 'pykaboo add /absolute/path/to/dir' "
+              "to add a path.")
             sys.exit()                 
         elif ar[0] == 'remove':
             with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc:
@@ -361,17 +376,19 @@ def handle_arguments(ar):
             # PFF:
             #print "To allow all filetypes type 'pykaboo allow *'."
             sys.exit()
-        elif is_int(ar[0]):
+        elif string_contains_int(ar[0]):
             if int(ar[0]) in range(65535):
                 # Avoid this global?
                 global port
                 port = int(ar[0])
             else:
-                print "Port number needs to be between 0 and 65534. Between 49152 and 65534 is advised."
+                print ("Port number needs to be between 0 and 65534. "
+                  "Between 49152 and 65534 is advised.")
                 sys.exit()
 
         else:
-            print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % ar[0] 
+            print ("'%s' is not a valid first argument. Type 'pykaboo help' "
+              "to get a list of valid arguments." % ar[0]) 
             sys.exit()
 
     elif len(ar) == 2:
@@ -388,7 +405,8 @@ def handle_arguments(ar):
             handle_disallow_argument(ar[1])
             sys.exit()
         else:
-            print "'%s' is not a valid first argument. Type 'pykaboo help' to get a list of valid arguments." % ar[0]
+            print ("'%s' is not a valid first argument. Type 'pykaboo help' "
+              "to get a list of valid arguments." % ar[0])
             sys.exit()
 
     else:
@@ -398,7 +416,8 @@ def handle_arguments(ar):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("cmd", help="Execute a command", action="store", nargs='*')
+    parser.add_argument("cmd", help="Execute a command", action="store", 
+      nargs='*')
     args = parser.parse_args()
     args_list = args.cmd
     if len(args_list) > 0:
@@ -411,7 +430,8 @@ def main():
     else:
         webbrowser.open("http://localhost:%d" % port)
 
-    # Let pykaboo initially show the folder containing the standard library modules.
+    # Let pykaboo initially show the folder containing the standard library 
+    #   modules.
     os.chdir(path_standard_library)
     server = BaseHTTPServer.HTTPServer(('', port), PykabooHTTPRequestHandler)
     try:
@@ -433,19 +453,21 @@ root = "/"
 port = 8090
 path_to_pykaboo = os.path.abspath(__file__)
 if path_to_pykaboo.endswith(".pyc"):
-    path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.pyc", "/pykaboo_style.css")
+    path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.pyc", 
+      "/pykaboo_style.css")
 else:
-    path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.py", "/pykaboo_style.css")
+    path_to_pykaboo_css = path_to_pykaboo.replace("/__init__.py", 
+      "/pykaboo_style.css")
 
 try:
     if ".virtualenvs" in sysconfig.get_path('platlib'):
-        path_external_packages = dc.get_python_lib()
+        path_external_packages = ds.get_python_lib()
     else:
         path_external_packages = sysconfig.get_path('platlib')
 except:
-    path_external_packages = dc.get_python_lib()
+    path_external_packages = ds.get_python_lib()
 
-path_standard_library = dc.get_python_lib(standard_lib=True)
+path_standard_library = ds.get_python_lib(standard_lib=True)
 
 if __name__ == '__main__':
     main()
