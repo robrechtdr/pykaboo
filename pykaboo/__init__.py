@@ -415,7 +415,7 @@ def handle_arguments(ar):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="pykaboo", add_help="False")
     parser.add_argument("cmd", help="Execute a command", action="store", 
       nargs='*')
     args = parser.parse_args()
