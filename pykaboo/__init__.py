@@ -12,25 +12,15 @@ except ImportError:
            " 'pip install -r requirements.txt'.")
     sys.exit()
 
-# NOTE:
-# PFF stands for scaffolding code for a Possible Future Feature.
-#
-# Comments not intended as code are indented by one space. 
-# Example: # This is a comment.
-#
-# Comments intended as code are not indented.              
-# Example: #print "This is a code comment."
-
 from subprocess import call
 import textwrap
 import platform
 import argparse
-# PFF:
-#import Image
 import SimpleHTTPServer
 import BaseHTTPServer
 import webbrowser
 import os
+import os.path
 import distutils.sysconfig as ds
 try:
     from cStringIO import StringIO
@@ -40,6 +30,18 @@ try:
     import sysconfig
 except ImportError:
     pass
+
+# NOTES:
+#
+#
+#
+# PFF stands for scaffolding code for a Possible Future Feature.
+#
+# Comments not intended as code are indented by one space. 
+# Example: # This is a comment.
+#
+# Comments intended as code are not indented.              
+# Example: #print "This is a code comment."
 
 if platform.system() == "Windows":
     print ("Windows users install Pykaboo on Cygwin with pip and run it from "
@@ -129,7 +131,8 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
           "User installed python packages</a></li>" % path_external_packages)
         # pass if file does not exist yet.
         try:
-            with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc: 
+            pyk_links_path = os.path.join(os.getenv("HOME"), '.pykaboolinks')
+            with open(pyk_links_path, "r") as prc: 
                 prc_string = prc.read()
             f.write(prc_string)
         except IOError:
@@ -161,7 +164,7 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 def file_endswith(name): 
     # pass if file does not exist yet.
     try:
-        with open(os.getenv("HOME") + '/.pykabooext', "r") as prc:
+        with open(os.path.join(os.getenv("HOME"), '.pykabooext'), "r") as prc:
             lines = prc.readlines()
             for line in lines:
                 # Stripping the \n.
@@ -212,7 +215,8 @@ def handle_add_argument(scmd):
         else:
             pass
 
-        with open(os.getenv("HOME") + '/.pykaboolinks', "a") as prc:
+        pyk_links_path = os.path.join(os.getenv("HOME"), '.pykaboolinks')
+        with open(pyk_links_path, "a") as prc:
             prc.write("<li class=shortcut-list><a class='sh-c' "
               "href=%s>%s</a></li>\n" % (scmd, d_name))
         print "You added '%s' as a green directory link." % d_name
@@ -229,7 +233,7 @@ def handle_remove_argument(scmd):
 
 
 def is_link_name(scmd):
-    with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykaboolinks'), "r") as prc:
         lines = prc.readlines()
         for line in lines:
             suff = "%s</a></li>\n" % scmd
@@ -241,10 +245,10 @@ def is_link_name(scmd):
 
 
 def remove_line(del_d_name):
-    with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykaboolinks'), "r") as prc:
         lines = prc.readlines()
 
-    with open(os.getenv("HOME") + '/.pykaboolinks', "w") as prc:
+    with open(os.path.join(os.getenv("HOME"), '/.pykaboolinks'), "w") as prc:
         for line in lines:
             suff = "%s</a></li>\n" % del_d_name
             if not line.endswith(suff):
@@ -270,7 +274,7 @@ def handle_allow_argument(scmd):
         # Allow all file types.
         pass
     else:
-        with open(os.getenv("HOME") + '/.pykabooext', "a") as prc:
+        with open(os.path.join(os.getenv("HOME"), '.pykabooext'), "a") as prc:
             prc.write("%s\n" % scmd)
 
     print ("You allowed files with the '%s' extension to be viewed "
@@ -286,7 +290,7 @@ def handle_disallow_argument(scmd):
 
 
 def is_allowed(scmd):
-    with open(os.getenv("HOME") + '/.pykabooext', "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "r") as prc:
         lines = prc.readlines()
         for line in lines:
             if scmd in line:
@@ -297,10 +301,10 @@ def is_allowed(scmd):
 
 
 def disallow_line(scmd):
-    with open(os.getenv("HOME") + '/.pykabooext', "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "r") as prc:
         lines = prc.readlines()
 
-    with open(os.getenv("HOME") + '/.pykabooext', "w") as prc:
+    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "w") as prc:
         for line in lines:
             fscmd = scmd + "\n"
             if not fscmd in line:
@@ -343,7 +347,8 @@ def handle_arguments(ar):
               "to add a path.")
             sys.exit()                 
         elif ar[0] == 'remove':
-            with open(os.getenv("HOME") + '/.pykaboolinks', "r") as prc:
+            pyk_links_path = os.path.join(os.getenv("HOME"), '/.pykaboolinks')
+            with open(pyk_links_path, "r") as prc:
                 lines = prc.readlines()
                 lines_string = "".join(lines) 
             if len(lines_string.strip()) == 0:
@@ -359,7 +364,8 @@ def handle_arguments(ar):
 
             sys.exit()          
         elif ar[0] == 'disallow':
-            with open(os.getenv("HOME") + '/.pykabooext', "r") as prc:
+            pyk_ext_path = os.path.join(os.getenv("HOME"), '.pykabooext')
+            with open(pyk_ext_path, "r") as prc:
                 lines = prc.readlines()
                 lines_string = "".join(lines) 
             if len(lines_string.strip()) == 0:
