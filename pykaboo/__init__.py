@@ -118,11 +118,6 @@ class PykabooHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         f.write("<body>\n<div class=page-container>")
         f.write("\n<div class='title-container'>")
         f.write("\n<h2>Pykaboo</h2>\n")
-        # PFF:
-        #po = open(os.getenv("HOME") +\
-        #  '/Desktop/sc/other/Pykaboo/pykaboo/pyk1.png').read()
-        #print po
-        #f.write("\n<img width='65' src='pyk1.png' id='symbol'/>\n")
         f.write("\n</div>")
         f.write("<ul class=shortcut-list>\n")
         f.write("<li class=shortcut-list><a class='sh-c' href=%s>"
@@ -170,11 +165,11 @@ def file_endswith(name):
                 # Stripping the \n.
                 val = name.endswith(line.strip())
                 if val:
-                    return True
+                    return val
                 else:
                     pass
 
-            return False
+            return val
     except IOError:
         pass      
 
@@ -238,17 +233,17 @@ def is_link_name(scmd):
         for line in lines:
             suff = "%s</a></li>\n" % scmd
             if line.endswith(suff):
-                return True
+                return line.endswith(suff)
             else:
                 pass
-        return False
+        return line.endswith(suff)
 
 
 def remove_line(del_d_name):
     with open(os.path.join(os.getenv("HOME"), '.pykaboolinks'), "r") as prc:
         lines = prc.readlines()
 
-    with open(os.path.join(os.getenv("HOME"), '/.pykaboolinks'), "w") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykaboolinks'), "w") as prc:
         for line in lines:
             suff = "%s</a></li>\n" % del_d_name
             if not line.endswith(suff):
@@ -290,7 +285,7 @@ def handle_disallow_argument(scmd):
 
 
 def is_allowed(scmd):
-    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykabooext'), "r") as prc:
         lines = prc.readlines()
         for line in lines:
             if scmd in line:
@@ -301,10 +296,10 @@ def is_allowed(scmd):
 
 
 def disallow_line(scmd):
-    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "r") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykabooext'), "r") as prc:
         lines = prc.readlines()
 
-    with open(os.path.join(os.getenv("HOME"), '/.pykabooext'), "w") as prc:
+    with open(os.path.join(os.getenv("HOME"), '.pykabooext'), "w") as prc:
         for line in lines:
             fscmd = scmd + "\n"
             if not fscmd in line:
@@ -347,7 +342,7 @@ def handle_arguments(ar):
               "to add a path.")
             sys.exit()                 
         elif ar[0] == 'remove':
-            pyk_links_path = os.path.join(os.getenv("HOME"), '/.pykaboolinks')
+            pyk_links_path = os.path.join(os.getenv("HOME"), '.pykaboolinks')
             with open(pyk_links_path, "r") as prc:
                 lines = prc.readlines()
                 lines_string = "".join(lines) 
