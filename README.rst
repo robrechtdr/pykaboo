@@ -60,3 +60,10 @@ Use Cygwin or use a Linux distro on a virtual machine.
 Support & bug reports
 =====================
 If you need support or if you spot bugs send a mail to *robrecht.de.rouck at gmail.com*. If you have a github account opening an issue or making a poll request is appreciated in case of bugs.
+
+Note about usage
+================
+Shortly after it's last release I stopped using Pykaboo for what it was intended. At the time I made it I still worked with `Gedit <http://www.python.org/>`_ as my main editor, need I say more? 
+It would still be convenient however in case I wanted to print out a significant amount of specific files in a repository.   
+
+If you are wondering I now use `Vim <http://www.vim.org/>`_ as my editor and in case I'd want to find only Python files or a file with a specific name I would just use `find <http://linux.die.net/man/1/find>`_.
